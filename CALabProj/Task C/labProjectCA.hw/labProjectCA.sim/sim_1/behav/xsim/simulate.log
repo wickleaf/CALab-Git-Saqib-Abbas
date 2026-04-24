@@ -1,0 +1,22 @@
+Vivado Simulator 2020.1
+Time resolution is 1 ps
+Time=0 ns | display_out=0x00000000 (dec=0) | LEDs[15:0]=0x0000
+=== Task B Test Program Started ===
+No switches needed - program is self-running.
+
+Time=135000 ns | display_out=0x00005003 (dec=20483) | LEDs[15:0]=0x5003
+
+--- After LUI test (rom[0]-rom[3]) ---
+  display_out = 0x00005003 (expect 0x00005003 if LUI+ADDI worked)
+  >> LUI TEST PASSED <<
+
+=== Simulation Complete ===
+The LUI result was verified in simulation.
+For full SLTI and BLT verification, either:
+  1. Run on FPGA hardware (recommended), or
+  2. Reduce delay constants (2000->3) in instructionMemory.v
+     and run simulation for ~2000 ns.
+
+Time=335000 ns | display_out=0x00000001 (dec=1) | LEDs[15:0]=0x0001
+Time=525000 ns | display_out=0x00000000 (dec=0) | LEDs[15:0]=0x0000
+$finish called at time : 650 ns : File "C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sim_1/new/TopLevelProcessor_tb.v" Line 93

@@ -1,0 +1,236 @@
+# Task B: Complete Demonstration & Viva Guide
+
+## 1. Hardware Output Summary (Confirmed Working ✅)
+
+After pressing **btnU** (reset), the demo auto-plays 5 steps:
+
+| Step | LEDs (16 → 1) | 7-Seg (leftmost two) | What It Proves |
+|------|---------------|----------------------|----------------|
+| **1** | `○●○●○○○○○○○○○○●●` (14,12,1,0) | **03** | **LUI** loaded 0x5000, ADDI added 3 → 0x5003 |
+| **2** | `○○○○○○○○○○○○○○○●` (0) | **01** | **SLTI**: 5 < 10 = TRUE → 1 |
+| **3** | `○○○○○○○○○○○○○○○○` (none) | **00** | **SLTI**: 5 < 3 = FALSE → 0 |
+| **4** | `○○○○○○○○○○○○○○○●` (0) | **01** | **BLT**: 3 < 7 → branch taken → PASS=1 |
+| **5** | `○○○○○○○○○○○○○○●○` (1) | **02** | **BLT**: 7 < 3 → not taken → PASS=2 |
+| HALT | stays LED 1 | stays **02** | Program finished. Press btnU to replay. |
+
+### Seven-Segment Display Values Explained
+
+The display register (`display_out`) is a 32-bit value. The seven-segment controller takes `display_out[4:0]` (lowest 5 bits) and shows it as a two-digit decimal number on **AN3** (tens) and **AN2** (ones) — the leftmost two digits on your board.
+
+| Step | display_out (hex) | bits[4:0] | Decimal | AN3 (tens) | AN2 (ones) |
+|------|-------------------|-----------|---------|------------|------------|
+| 1 | 0x00005003 | 00011 | 3 | **0** | **3** |
+| 2 | 0x00000001 | 00001 | 1 | **0** | **1** |
+| 3 | 0x00000000 | 00000 | 0 | **0** | **0** |
+| 4 | 0x00000001 | 00001 | 1 | **0** | **1** |
+| 5 | 0x00000002 | 00010 | 2 | **0** | **2** |
+
+> [!NOTE]
+> For Step 1 (LUI), the full value is 0x5003 but the 7-seg only shows the lower 5 bits = 3. The **LEDs** are what prove the upper bits (LED 14 and 12 = bits 14 and 12 of 0x5000). The 7-seg and LEDs work together to show the full picture.
+
+---
+
+## 2. Viva Explanation Guide
+
+### Opening Statement
+
+*"For Task B, I implemented three new RV32I instructions of different types: **LUI** (U-type), **SLTI** (I-type arithmetic), and **BLT** (B-type branch). Each required modifications to the control path and datapath."*
+
+---
+
+### Instruction 1: LUI (Load Upper Immediate) — U-Type
+
+**What it does:** Loads a 20-bit immediate into the upper 20 bits (bits 31:12) of the destination register, zeroing the lower 12 bits.
+
+**Modules modified:**
+
+| Module | Change | Why |
+|--------|--------|-----|
+| **immGen.v** | Added case `7'b0110111`: `imm = {instruction[31:12], 12'b0}` | U-type immediate format: 20 bits go into upper positions |
+| **MainControl.v** | Added case `7'b0110111`: `RegWrite=1, ALUSrc=1, ALUOp=00` | LUI needs to write to register file using the immediate |
+
+**How it works in the datapath:**
+
+*"LUI has opcode `0110111`. The immediate generator extracts bits [31:12] from the instruction and places them in the upper 20 bits with 12 zeros below. In MainControl, I set `ALUSrc=1` so the ALU receives the immediate, and `ALUOp=00` which maps to ADD. Since the LUI encoding always has rs1=x0 (hardwired zero), the ALU computes `0 + immediate = immediate`, and RegWrite stores this in the destination register. No new MUX or datapath changes were needed."*
+
+**Hardware proof:**
+
+*"After reset, the first display shows LEDs 14, 12, 1, and 0 lit. This is 0x5003. The upper bits (14, 12) come from `lui x1, 0x00005` which loaded 0x5000. The lower bits (1, 0) come from `addi x1, x1, 3` which added 3. The seven-segment shows 03 (the lower portion). Together this proves LUI correctly loaded the upper immediate."*
+
+---
+
+### Instruction 2: SLTI (Set Less Than Immediate) — I-Type
+
+**What it does:** Compares a register value against a sign-extended immediate. Writes 1 to rd if rs1 < immediate (signed), else writes 0.
+
+**Modules modified:**
+
+| Module | Change | Why |
+|--------|--------|-----|
+| **ALUControl.v** | Added `funct3=3'b010 → ALUControlOut=4'b0111` under I-type ALU case | SLTI uses funct3=010, maps to SLT ALU operation |
+
+**How it works in the datapath:**
+
+*"SLTI shares the same opcode as ADDI (`0010011`) so MainControl already handles it — RegWrite=1, ALUSrc=1, ALUOp=11. The difference is in funct3: SLTI has funct3=010. In ALUControl, I added a case for funct3=010 that outputs ALU control code 0111, which is the SLT (set-less-than) operation. The ALU already had the SLT case: it evaluates `$signed(A) < $signed(B) ? 1 : 0` and stores the result. Since ALUSrc=1, operand B is the sign-extended immediate. The 1 or 0 result gets written to rd through the normal write-back path."*
+
+**Hardware proof:**
+
+*"I test SLTI twice. First: `slti x4, x3, 10` where x3=5. Since 5 < 10 is true, x4=1, and the display shows 01. Then `slti x5, x3, 3` where x3=5. Since 5 < 3 is false, x5=0, and the display shows 00. The transition from 01 to 00 proves SLTI correctly evaluates both true and false conditions."*
+
+---
+
+### Instruction 3: BLT (Branch if Less Than) — B-Type
+
+**What it does:** Branches to PC + offset if rs1 < rs2 (signed comparison).
+
+**Modules modified:**
+
+| Module | Change | Why |
+|--------|--------|-----|
+| **ALU.v** | Added output `Less_Than = ($signed(A) < $signed(B))` | BLT needs a signed comparison flag separate from Zero |
+| **TopLevelProcessor.v** | Rewrote `branch_taken` logic using funct3 bits to dispatch BEQ/BNE/BLT | Different branch types need different conditions |
+
+**How it works in the datapath:**
+
+*"BLT shares opcode `1100011` with BEQ and BNE, so MainControl already sets Branch=1 and ALUOp=01. The key change is in how we decide whether to branch. Previously, the branch logic was just `Branch & (instruction[12] ^ Zero)` which only supports BEQ/BNE. I added a `Less_Than` output to the ALU — a continuous assign that always evaluates `$signed(A) < $signed(B)`. Then in the top module, I decode funct3 to determine which branch type:*
+
+- *BEQ (funct3=000): branch when Zero=1*
+- *BNE (funct3=001): branch when Zero=0*  
+- *BLT (funct3=100): branch when Less_Than=1*
+
+*The branch_taken signal is `Branch & (beq_taken | bne_taken | blt_taken)`. This preserves existing BEQ/BNE behavior while adding BLT."*
+
+**Hardware proof:**
+
+*"I test BLT twice. First: `blt x12, x13` where x12=3 and x13=7. Since 3 < 7 is true, the branch is taken, skipping the FAIL instruction and landing on PASS (x10=1). Display shows 01. Then: `blt x13, x12` (operands swapped). Since 7 < 3 is false, the branch is NOT taken, falling through to PASS (x11=2). Display shows 02. If BLT were broken, we'd see 00 instead."*
+
+---
+
+### Key Points the Instructor May Ask
+
+**Q: Why didn't you need to modify MainControl for SLTI?**
+> *"SLTI shares opcode 0010011 with ADDI. MainControl only decodes the opcode, so the same control signals (RegWrite=1, ALUSrc=1, ALUOp=11) work for both. The difference is in funct3, which ALUControl uses to select the right ALU operation."*
+
+**Q: Why didn't you need to modify immGen for SLTI or BLT?**
+> *"SLTI uses the same I-type immediate format as ADDI (already supported). BLT uses the same B-type immediate format as BEQ (already supported). Only LUI needed a new immediate format (U-type)."*
+
+**Q: Could BLT use the Zero flag instead of a new Less_Than flag?**
+> *"No. The Zero flag only tells us if A-B equals zero (for equality). For less-than, we need to check the sign of the subtraction result, which is more complex due to overflow. A dedicated signed comparison is cleaner and correct."*
+
+**Q: Does adding BLT break existing BEQ/BNE instructions?**
+> *"No. The branch logic uses funct3 bits to dispatch. BEQ (funct3=000) and BNE (funct3=001) each have their own condition that only fires when the matching funct3 bits are present. The existing countdown timer program still works correctly."*
+
+---
+
+## 3. Testbench Verification in Vivado
+
+### Setting Up Simulation
+
+1. In Vivado **Sources** panel, expand **Simulation Sources** → **sim_1**
+2. Right-click [TopLevelProcessor_tb.v](file:///c:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sim_1/new/TopLevelProcessor_tb.v) → **Set as Top**
+3. Make sure the design sources have [TopLevelProcessor.v](file:///c:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/TopLevelProcessor.v) as the synthesis top (not TopLevelFPGA for simulation)
+
+### Running Simulation
+
+1. Click **Flow Navigator** → **Simulation** → **Run Behavioral Simulation**
+2. The simulation runs for ~650 ns and auto-finishes
+3. Check the **Tcl Console** at the bottom for text output:
+
+```
+=== Task B Test Program Started ===
+No switches needed - program is self-running.
+
+--- After LUI test (rom[0]-rom[3]) ---
+  display_out = 0x00005003 (expect 0x00005003 if LUI+ADDI worked)
+  >> LUI TEST PASSED <<
+```
+
+### What Waveforms to Look For
+
+Add these signals to the waveform viewer (right-click → Add to Wave Window):
+
+| Signal | Path | What to watch |
+|--------|------|---------------|
+| `clk` | `uut/clk` | Clock reference |
+| `rst` | `uut/rst` | Goes low at 100 ns |
+| `PC` | `uut/PC` | Should increment by 4 each cycle |
+| `instruction` | `uut/instruction` | The fetched instruction hex |
+| `ALUResult` | `uut/ALUResult` | ALU output value |
+| `display_out` | `uut/display_out` | What gets shown on LEDs/7-seg |
+| `Zero` | `uut/Zero` | ALU zero flag |
+| `Less_Than` | `uut/Less_Than` | ALU less-than flag (for BLT) |
+| `branch_taken` | `uut/branch_taken` | Whether branch fires |
+
+### Expected Waveform Timeline
+
+```
+Time(ns)  PC      Instruction  ALUResult    display_out  Event
+────────  ──────  ───────────  ───────────  ───────────  ──────────────────
+100       0x00    20000493     0x00000200   0x00000000   addi x9, x0, 512
+110       0x04    000050B7     0x00005000   0x00000000   lui x1, 5
+120       0x08    00308093     0x00005003   0x00000000   addi x1, x1, 3
+130       0x0C    0014A023     0x00000200   0x00005003   sw x1, 0(x9) ← DISPLAY CHANGES
+140       0x10    064000EF     ...          0x00005003   jal ra, DELAY
+150       0x74    7D000313     ...          0x00005003   (delay loop starts)
+...       ...     ...          ...          0x00005003   (delay loop running)
+```
+
+> [!IMPORTANT]
+> The delay loop runs for ~8 million cycles. You'll only see the **first display value (0x5003)** change within a reasonable simulation time. To see all 5 values, use the shortened delay trick below.
+
+### Shortened-Delay Simulation (See All 5 Tests)
+
+To verify all tests in simulation, temporarily reduce the delay loop:
+
+1. In [instructionMemory.v](file:///c:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/instructionMemory.v), change:
+
+```diff
+- rom[29] = 32'h7D000313; // addi t1, x0, 2000
+- rom[30] = 32'h7D000393; // addi t2, x0, 2000
++ rom[29] = 32'h00200313; // addi t1, x0, 2     (shortened for sim)
++ rom[30] = 32'h00200393; // addi t2, x0, 2     (shortened for sim)
+```
+
+2. Run simulation for **2000 ns** (increase sim time: in toolbar, type `2000ns` in the run time box, click ▶)
+
+3. Expected `display_out` transitions in waveform:
+
+```
+display_out:  0x00000000 → 0x00005003 → 0x00000001 → 0x00000000 → 0x00000001 → 0x00000002
+                           ↑ LUI        ↑ SLTI=1     ↑ SLTI=0     ↑ BLT taken  ↑ BLT !taken
+```
+
+4. **⚠️ CHANGE BACK TO 2000 (0x7D0) BEFORE SYNTHESIZING FOR FPGA!**
+
+```diff
+- rom[29] = 32'h00200313; // addi t1, x0, 2
+- rom[30] = 32'h00200393; // addi t2, x0, 2
++ rom[29] = 32'h7D000313; // addi t1, x0, 2000
++ rom[30] = 32'h7D000393; // addi t2, x0, 2000
+```
+
+### Waveform Screenshot Checklist for Report
+
+When capturing waveforms for your report, make sure to show:
+
+1. **LUI**: `instruction = 000050B7` → `ALUResult = 0x5000` (proves upper bits loaded)
+2. **SLTI TRUE**: `instruction = 00A1A213` → `ALUResult = 1` (5 < 10)
+3. **SLTI FALSE**: `instruction = 0031A293` → `ALUResult = 0` (5 < 3)
+4. **BLT TAKEN**: `instruction = 00D64663` → `Less_Than = 1`, `branch_taken = 1`
+5. **BLT NOT TAKEN**: `instruction = 00C6C663` → `Less_Than = 0`, `branch_taken = 0`
+6. **display_out** changing through all 5 values
+
+---
+
+## 4. Files Modified Summary
+
+| File | What Changed |
+|------|-------------|
+| [immGen.v](file:///c:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/immGen.v) | U-type immediate for LUI |
+| [MainControl.v](file:///c:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/MainControl.v) | LUI opcode case |
+| [ALUControl.v](file:///c:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/ALUControl.v) | SLTI funct3 decode |
+| [ALU.v](file:///c:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/ALU.v) | `Less_Than` output flag |
+| [TopLevelProcessor.v](file:///c:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/TopLevelProcessor.v) | BLT branch logic + wiring |
+| [instructionMemory.v](file:///c:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/instructionMemory.v) | Task B demo program |
+| [SevenSegController.v](file:///c:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/SevenSegController.v) | Moved display to leftmost 2 digits |
+| [TopLevelProcessor_tb.v](file:///c:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sim_1/new/TopLevelProcessor_tb.v) | Updated testbench |

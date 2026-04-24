@@ -1,0 +1,38 @@
+// fibonacci.mem
+// TASK C: ITERATIVE FIBONACCI SEQUENCE CALCULATOR
+
+@00
+1F000113 // [0]  addi sp, x0, 0x1F0      | sp = 496 (stack top)
+20000913 // [1]  addi s2, x0, 0x200      | s2 = 512 (LED address)
+00000413 // [2]  addi s0, x0, 0          | s0 = fib_prev = 0
+00100493 // [3]  addi s1, x0, 1          | s1 = fib_curr = 1
+00040513 // [4]  addi a0, s0, 0          | a0 = 0 (display fib_prev)
+030000EF // [5]  jal  ra, +48            | call DISPLAY_AND_DELAY
+00048513 // [6]  addi a0, s1, 0          | a0 = 1 (display fib_curr)
+028000EF // [7]  jal  ra, +40            | call DISPLAY_AND_DELAY
+009409B3 // [8]  add  s3, s0, s1         | s3 = fib_prev + fib_curr
+000102B7 // [9]  lui  t0, 0x00010        | t0 = 65536 (16-bit limit)
+0059C463 // [10] blt  s3, t0, +8         | if s3 < 65536 -> CONTINUE
+FDDFF06F // [11] jal  x0, -36            | else -> RESET_FIB
+00048413 // [12] addi s0, s1, 0          | fib_prev = fib_curr
+00098493 // [13] addi s1, s3, 0          | fib_curr = next_fib
+00048513 // [14] addi a0, s1, 0          | a0 = new fib_curr
+008000EF // [15] jal  ra, +8             | call DISPLAY_AND_DELAY
+FE1FF06F // [16] jal  x0, -32            | -> FIB_LOOP
+FF810113 // [17] addi sp, sp, -8         | allocate stack frame
+00112223 // [18] sw   ra, 4(sp)          | save return address
+00812023 // [19] sw   s0, 0(sp)          | save s0 (caller's fib_prev)
+00050413 // [20] addi s0, a0, 0          | s0 = argument
+00892023 // [21] sw   s0, 0(s2)          | write s0 to LED display
+014000EF // [22] jal  ra, +20            | call DELAY
+00012403 // [23] lw   s0, 0(sp)          | restore s0
+00412083 // [24] lw   ra, 4(sp)          | restore return address
+00810113 // [25] addi sp, sp, 8          | deallocate stack frame
+00008067 // [26] jalr x0, ra, 0          | return to caller
+7D000313 // [27] addi t1, x0, 2000       | outer loop count
+7D000393 // [28] addi t2, x0, 2000       | inner loop count
+FFF38393 // [29] addi t2, t2, -1         | t2--
+FE039EE3 // [30] bne  t2, x0, -4         | if t2!=0 -> DELAY_INNER
+FFF30313 // [31] addi t1, t1, -1         | t1--
+FE0318E3 // [32] bne  t1, x0, -16        | if t1!=0 -> DELAY_OUTER
+00008067 // [33] jalr x0, ra, 0          | return

@@ -1,0 +1,22 @@
+0.7
+2020.1
+May 27 2020
+20:09:33
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.sim/sim_1/behav/xsim/glbl.v,1590624368,verilog,,,,glbl,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sim_1/new/TopLevelProcessor_tb.v,1776148268,verilog,,,,TopLevelProcessor_tb,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/ALU.v,1776088025,verilog,,C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/ALUControl.v,,ALU,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/ALUControl.v,1776088014,verilog,,C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/DataMemory.v,,ALUControl,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/DataMemory.v,1776082123,verilog,,C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/MainControl.v,,DataMemory,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/MainControl.v,1776088000,verilog,,C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/ProgramCounter.v,,MainControl,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/ProgramCounter.v,1776082044,verilog,,C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/RegisterFile.v,,ProgramCounter,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/RegisterFile.v,1776082066,verilog,,C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/TopLevelProcessor.v,,RegisterFile,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/SevenSegController.v,1776083929,verilog,,C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/TopLevelProcessor.v,,SevenSegController,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/TopLevelFPGA.v,1776085774,verilog,,,,TopLevelFPGA,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/TopLevelProcessor.v,1776088043,verilog,,C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/addressDecoderTop.v,,TopLevelProcessor,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/addressDecoderTop.v,1776082827,verilog,,C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/branch_adder.v,,addressDecoderTop,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/branch_adder.v,1776082051,verilog,,C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/immGen.v,,branch_adder,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/clk_divider.v,1776082198,verilog,,C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/immGen.v,,clk_divider,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/immGen.v,1776087979,verilog,,C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/instructionMemory.v,,immGen,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/instructionMemory.v,1776155074,verilog,,C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/mmux2.v,,instructionMemory,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/mmux2.v,1776082057,verilog,,C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/pcAdder.v,,mmux2,,,,,,,,
+C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/pcAdder.v,1776082047,verilog,,C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sim_1/new/TopLevelProcessor_tb.v,,pcAdder,,,,,,,,

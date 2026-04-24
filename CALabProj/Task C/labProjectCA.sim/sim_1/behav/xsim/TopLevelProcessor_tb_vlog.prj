@@ -1,0 +1,22 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  \
+"../../../../labProjectCA.srcs/sources_1/new/ALU.v" \
+"../../../../labProjectCA.srcs/sources_1/new/ALUControl.v" \
+"../../../../labProjectCA.srcs/sources_1/new/DataMemory.v" \
+"../../../../labProjectCA.srcs/sources_1/new/MainControl.v" \
+"../../../../labProjectCA.srcs/sources_1/new/ProgramCounter.v" \
+"../../../../labProjectCA.srcs/sources_1/new/RegisterFile.v" \
+"../../../../labProjectCA.srcs/sources_1/new/TopLevelProcessor.v" \
+"../../../../labProjectCA.srcs/sources_1/new/addressDecoderTop.v" \
+"../../../../labProjectCA.srcs/sources_1/new/branch_adder.v" \
+"../../../../labProjectCA.srcs/sources_1/new/immGen.v" \
+"../../../../labProjectCA.srcs/sources_1/new/instructionMemory.v" \
+"../../../../labProjectCA.srcs/sources_1/new/mmux2.v" \
+"../../../../labProjectCA.srcs/sources_1/new/pcAdder.v" \
+"../../../../labProjectCA.srcs/sim_1/new/TopLevelProcessor_tb.v" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

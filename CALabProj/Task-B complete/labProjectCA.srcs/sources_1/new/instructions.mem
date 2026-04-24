@@ -1,0 +1,41 @@
+// instructions.mem
+// TASK B DEMONSTRATION PROGRAM
+// Tests LUI, SLTI, and BLT with visible LED/7-seg output.
+
+@00
+20000493 // [0]  addi x9, x0, 512       | x9 = 0x200 (display addr)
+000050B7 // [1]  lui  x1, 0x00005       | x1 = 0x5000
+00308093 // [2]  addi x1, x1, 3         | x1 = 0x5003
+0014A023 // [3]  sw   x1, 0(x9)         | display <- 0x5003
+064000EF // [4]  jal  ra, +100          | call DELAY
+00500193 // [5]  addi x3, x0, 5         | x3 = 5
+00A1A213 // [6]  slti x4, x3, 10        | x4 = 1
+0044A023 // [7]  sw   x4, 0(x9)         | display <- 1
+054000EF // [8]  jal  ra, +84           | call DELAY
+0031A293 // [9]  slti x5, x3, 3         | x5 = 0
+0054A023 // [10] sw   x5, 0(x9)         | display <- 0
+048000EF // [11] jal  ra, +72           | call DELAY
+00300613 // [12] addi x12, x0, 3        | x12 = 3
+00700693 // [13] addi x13, x0, 7        | x13 = 7
+00D64663 // [14] blt  x12, x13, +12     | 3<7 -> TAKEN
+00000513 // [15] addi x10, x0, 0        | FAIL (skipped if BLT works)
+0080006F // [16] jal  x0, +8            | jump
+00100513 // [17] addi x10, x0, 1        | PASS (BLT landed here)
+00A4A023 // [18] sw   x10, 0(x9)        | display <- result
+028000EF // [19] jal  ra, +40           | call DELAY
+00C6C663 // [20] blt  x13, x12, +12     | 7<3 -> NOT TAKEN
+00200593 // [21] addi x11, x0, 2        | PASS (fell through correctly)
+0080006F // [22] jal  x0, +8            | jump
+00000593 // [23] addi x11, x0, 0        | FAIL (BLT wrongly taken)
+00B4A023 // [24] sw   x11, 0(x9)        | display <- result
+010000EF // [25] jal  ra, +16           | call DELAY
+0000006F // [26] jal  x0, 0             | infinite loop (halt)
+00000013 // [27] nop (padding)
+00000013 // [28] nop (padding)
+7D000313 // [29] addi t1, x0, 2000      | outer loop count
+7D000393 // [30] addi t2, x0, 2000      | inner loop count
+FFF38393 // [31] addi t2, t2, -1        | t2--
+FE039EE3 // [32] bne  t2, x0, -4        | if t2!=0 -> DELAY_INNER
+FFF30313 // [33] addi t1, t1, -1        | t1--
+FE0318E3 // [34] bne  t1, x0, -16       | if t1!=0 -> DELAY_OUTER
+00008067 // [35] jalr x0, ra, 0         | return
