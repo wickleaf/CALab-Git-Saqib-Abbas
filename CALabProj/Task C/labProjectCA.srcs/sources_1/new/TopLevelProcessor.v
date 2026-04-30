@@ -19,6 +19,7 @@ module TopLevelProcessor(
     // Control Signals
     wire        Branch, MemRead, MemWrite, ALUSrc, RegWrite;
     wire        Jump, JumpReg;
+    wire        LUI;               // NEW: routes imm directly to write-back
     wire [1:0]  MemtoReg, ALUOp;
     wire [3:0]  ALU_Ctrl;
 
@@ -28,7 +29,6 @@ module TopLevelProcessor(
     // ALU
     wire [31:0] ALU_B, ALUResult;
     wire        Zero;
-    wire        Less_Than;
 
     // Memory
     wire [31:0] mem_read_data;
@@ -41,21 +41,26 @@ module TopLevelProcessor(
     // BRANCH / JUMP DECISION LOGIC
     // =====================================================
 
-    // Branch condition using funct3[2:0] = instruction[14:12]:
-    //   BEQ  (funct3=000): branch when Zero=1
-    //   BNE  (funct3=001): branch when Zero=0
-    //   BLT  (funct3=100): branch when Less_Than=1
-    wire beq_taken = (~instruction[14]) & (~instruction[12]) & Zero;        // funct3=000
-    wire bne_taken = (~instruction[14]) & ( instruction[12]) & (~Zero);     // funct3=001
-    wire blt_taken = ( instruction[14]) & (~instruction[12]) & Less_Than;   // funct3=100
-    wire branch_taken = Branch & (beq_taken | bne_taken | blt_taken);
+    wire [2:0] funct3_b = instruction[14:12];
 
-    // JALR target: rs1 + imm with LSB cleared
+    // BEQ  (funct3=000): branch when Zero=1   (SUB result == 0)
+    // BNE  (funct3=001): branch when Zero=0   (SUB result != 0)
+    // BLT  (funct3=100): branch when SLT=1    (ALUResult[0]==1 means rs1 < rs2)
+    // BGE  (funct3=101): branch when SLT=0    (ALUResult[0]==0 means rs1 >= rs2)
+    wire branch_taken = Branch & (
+        (funct3_b == 3'b000) ?  Zero         :   // BEQ
+        (funct3_b == 3'b001) ? ~Zero         :   // BNE
+        (funct3_b == 3'b100) ?  ALUResult[0] :   // BLT  (NEW)
+        (funct3_b == 3'b101) ? ~ALUResult[0] :   // BGE  (NEW)
+        1'b0
+    );
+
+    // JALR target: rs1 + imm, LSB forced to 0 (RISC-V spec)
     wire [31:0] JALR_target = {ALUResult[31:1], 1'b0};
 
     // PC selection priority: JALR > JAL/Branch > PC+4
-    assign PCNext = JumpReg              ? JALR_target   :
-                    (Jump | branch_taken) ? BranchTarget  :
+    assign PCNext = JumpReg               ? JALR_target  :
+                    (Jump | branch_taken)  ? BranchTarget :
                     PCPlus4;
 
     // =====================================================
@@ -93,7 +98,8 @@ module TopLevelProcessor(
         .Branch   (Branch),
         .Jump     (Jump),
         .JumpReg  (JumpReg),
-        .ALUOp    (ALUOp)
+        .ALUOp    (ALUOp),
+        .LUI      (LUI)            // NEW port
     );
 
     // 5. Register File
@@ -137,8 +143,7 @@ module TopLevelProcessor(
         .B          (ALU_B),
         .ALUControl (ALU_Ctrl),
         .ALUResult  (ALUResult),
-        .Zero       (Zero),
-        .Less_Than  (Less_Than)
+        .Zero       (Zero)
     );
 
     // 10. Branch / Jump Target Adder
@@ -164,10 +169,21 @@ module TopLevelProcessor(
 
     assign display_out = display_reg;
 
-    // 12. Write-back MUX (3-to-1)
-    // MemtoReg: 00 = ALU result, 01 = Memory read, 10 = PC+4
-    assign WriteData = (MemtoReg == 2'b01) ? mem_read_data :
-                       (MemtoReg == 2'b10) ? PCPlus4       :
+    // 12. Write-back MUX (4-to-1, LUI has highest priority)
+    //
+    //   LUI=1      ? imm         (upper-immediate, bypasses ALU entirely)
+    //   MemtoReg=01? mem_read_data (LW result)
+    //   MemtoReg=10? PCPlus4      (JAL / JALR return address)
+    //   default    ? ALUResult    (R-type, ADDI, SLTI …)
+    //
+    // Why LUI bypasses the ALU:
+    //   For LUI, instruction[19:15] encodes part of the immediate, NOT rs1.
+    //   readData1 would be a garbage register value, so we cannot use ADD.
+    //   Instead, immGen produces the full 32-bit shifted value and we route
+    //   it straight to the register file here.
+    assign WriteData = LUI               ? imm           :
+                       (MemtoReg==2'b01) ? mem_read_data :
+                       (MemtoReg==2'b10) ? PCPlus4       :
                        ALUResult;
 
 endmodule

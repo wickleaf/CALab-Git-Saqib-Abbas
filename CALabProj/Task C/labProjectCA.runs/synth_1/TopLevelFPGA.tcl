@@ -4,7 +4,7 @@
 
 set TIME_start [clock seconds] 
 namespace eval ::optrace {
-  variable script "C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.runs/synth_1/TopLevelFPGA.tcl"
+  variable script "C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.runs/synth_1/TopLevelFPGA.tcl"
   variable category "vivado_synth"
 }
 
@@ -70,39 +70,38 @@ proc create_report { reportName command } {
   }
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
-set_param chipscope.maxJobs 5
-set_param xicom.use_bs_reader 1
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xc7a35tcpg236-1
 
 set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
-set_property webtalk.parent_dir C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.cache/wt [current_project]
-set_property parent.project_path C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.xpr [current_project]
+set_property webtalk.parent_dir {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.cache/wt} [current_project]
+set_property parent.project_path {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.xpr} [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
-set_property ip_output_repo c:/Users/ba09716/Downloads/labProjectCA/labProjectCA.cache/ip [current_project]
+set_property ip_output_repo {c:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.cache/ip} [current_project]
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
+read_mem {{C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/fibonacci.mem}}
 read_verilog -library xil_defaultlib {
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/ALU.v
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/ALUControl.v
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/DataMemory.v
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/MainControl.v
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/ProgramCounter.v
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/RegisterFile.v
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/SevenSegController.v
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/TopLevelProcessor.v
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/addressDecoderTop.v
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/branch_adder.v
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/clk_divider.v
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/immGen.v
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/instructionMemory.v
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/mmux2.v
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/pcAdder.v
-  C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/sources_1/new/TopLevelFPGA.v
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/ALU.v}
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/ALUControl.v}
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/DataMemory.v}
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/MainControl.v}
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/ProgramCounter.v}
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/RegisterFile.v}
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/SevenSegController.v}
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/TopLevelProcessor.v}
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/addressDecoderTop.v}
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/branch_adder.v}
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/clk_divider.v}
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/immGen.v}
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/instructionMemory.v}
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/mmux2.v}
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/pcAdder.v}
+  {C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/sources_1/new/TopLevelFPGA.v}
 }
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -113,8 +112,8 @@ OPTRACE "Adding files" END { }
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
-read_xdc C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/constrs_1/new/Basys3.xdc
-set_property used_in_implementation false [get_files C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.srcs/constrs_1/new/Basys3.xdc]
+read_xdc {{C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/constrs_1/new/Basys3.xdc}}
+set_property used_in_implementation false [get_files {{C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.srcs/constrs_1/new/Basys3.xdc}}]
 
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]

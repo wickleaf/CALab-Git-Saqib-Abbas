@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="49" Path="C:/Users/Saqib Rehman/Downloads/CALabProj/CALabProj/Task C/labProjectCA.xpr">
+<Project Version="7" Minor="49" Path="C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task C/labProjectCA.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="241885e8b66b49dd96c14adf75f84141"/>

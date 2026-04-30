@@ -10,15 +10,16 @@ module MainControl(
     output reg        Branch,
     output reg        Jump,        // JAL
     output reg        JumpReg,     // JALR
-    output reg  [1:0] ALUOp
+    output reg  [1:0] ALUOp,
+    output reg        LUI          // NEW: high when instruction is LUI
 );
     always @(*) begin
-        // Safe defaults
+        // Safe defaults - all off
         RegWrite = 1'b0;  ALUSrc   = 1'b0;
         MemRead  = 1'b0;  MemWrite = 1'b0;
         MemtoReg = 2'b00; Branch   = 1'b0;
         Jump     = 1'b0;  JumpReg  = 1'b0;
-        ALUOp    = 2'b00;
+        ALUOp    = 2'b00; LUI      = 1'b0;
 
         case (opcode)
             7'b0110011: begin // R-type (ADD, SUB, SLL, SRL, AND, OR, XOR)
@@ -26,7 +27,7 @@ module MainControl(
                 ALUOp    = 2'b10;
             end
 
-            7'b0010011: begin // I-type ALU (ADDI)
+            7'b0010011: begin // I-type ALU (ADDI, SLTI)
                 RegWrite = 1'b1;
                 ALUSrc   = 1'b1;
                 ALUOp    = 2'b11;
@@ -44,7 +45,7 @@ module MainControl(
                 MemWrite = 1'b1;
             end
 
-            7'b1100011: begin // B-type Branch (BEQ, BNE)
+            7'b1100011: begin // B-type Branch (BEQ, BNE, BLT, BGE)
                 Branch   = 1'b1;
                 ALUOp    = 2'b01;
             end
@@ -57,19 +58,22 @@ module MainControl(
 
             7'b1100111: begin // I-type (JALR)
                 RegWrite = 1'b1;
-                ALUSrc   = 1'b1;   // ALU computes rs1 + imm
+                ALUSrc   = 1'b1;
                 JumpReg  = 1'b1;
                 MemtoReg = 2'b10;  // write PC+4 to rd
             end
 
             7'b0110111: begin // U-type (LUI)
+                // LUI writes the upper-immediate directly to rd.
+                // The immediate is produced by immGen (U-type path).
+                // WriteData mux in TopLevelProcessor uses LUI=1 to
+                // bypass the ALU and route imm straight to the register file.
                 RegWrite = 1'b1;
-                ALUSrc   = 1'b1;   // ALU uses immediate
-                // ALUOp = 00 -> ADD; rs1=x0 so result = 0 + imm
+                LUI      = 1'b1;
             end
 
             default: begin
-                // All zeros (safe)
+                // All zeros (safe - no side effects)
             end
         endcase
     end

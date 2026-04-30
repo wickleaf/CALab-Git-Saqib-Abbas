@@ -1,8 +1,8 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.1 (win64) Build 2902540 Wed May 27 19:54:49 MDT 2020
-| Date         : Tue Apr 14 12:57:56 2026
-| Host         : HU-DOPX-PWL05 running 64-bit major release  (build 9200)
+| Date         : Thu Apr 30 11:11:33 2026
+| Host         : DESKTOP-4B0VT85 running 64-bit major release  (build 9200)
 | Command      : report_control_sets -verbose -file TopLevelFPGA_control_sets_placed.rpt
 | Design       : TopLevelFPGA
 | Device       : xc7a35t
@@ -59,10 +59,10 @@ Table of Contents
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | No           | No                    | No                     |               0 |            0 |
-| No           | No                    | Yes                    |              53 |           21 |
+| No           | No                    | Yes                    |              53 |           24 |
 | No           | Yes                   | No                     |               0 |            0 |
 | Yes          | No                    | No                     |               0 |            0 |
-| Yes          | No                    | Yes                    |             373 |          229 |
+| Yes          | No                    | Yes                    |             373 |          221 |
 | Yes          | Yes                   | No                     |               0 |            0 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
@@ -74,19 +74,19 @@ Table of Contents
 |      Clock Signal     |        Enable Signal        | Set/Reset Signal | Slice Load Count | Bel Load Count | Bels / Slice |
 +-----------------------+-----------------------------+------------------+------------------+----------------+--------------+
 |  clk_100mhz_IBUF_BUFG |                             | btnU_IBUF        |                6 |             21 |         3.50 |
-|  proc_clk_BUFG        | u_proc/u_PC/E[0]            | btnU_IBUF        |               13 |             21 |         1.62 |
-|  proc_clk_BUFG        |                             | btnU_IBUF        |               15 |             32 |         2.13 |
-|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_25[0] | btnU_IBUF        |               15 |             32 |         2.13 |
-|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_21[0] | btnU_IBUF        |               25 |             32 |         1.28 |
-|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_24[0] | btnU_IBUF        |               14 |             32 |         2.29 |
-|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_26[0] | btnU_IBUF        |               21 |             32 |         1.52 |
-|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_22[0] | btnU_IBUF        |               20 |             32 |         1.60 |
-|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_23[0] | btnU_IBUF        |               16 |             32 |         2.00 |
-|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_28[0] | btnU_IBUF        |               25 |             32 |         1.28 |
-|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_27[0] | btnU_IBUF        |               14 |             32 |         2.29 |
-|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_31[0] | btnU_IBUF        |               28 |             32 |         1.14 |
-|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_32[0] | btnU_IBUF        |               20 |             32 |         1.60 |
-|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_20[0] | btnU_IBUF        |               18 |             32 |         1.78 |
+|  proc_clk_BUFG        | u_proc/u_PC/E[0]            | btnU_IBUF        |               15 |             21 |         1.40 |
+|  proc_clk_BUFG        |                             | btnU_IBUF        |               18 |             32 |         1.78 |
+|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_13[0] | btnU_IBUF        |               19 |             32 |         1.68 |
+|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_12[0] | btnU_IBUF        |               22 |             32 |         1.45 |
+|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_15[0] | btnU_IBUF        |               19 |             32 |         1.68 |
+|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_16[0] | btnU_IBUF        |               15 |             32 |         2.13 |
+|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_14[0] | btnU_IBUF        |               16 |             32 |         2.00 |
+|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_17[0] | btnU_IBUF        |               14 |             32 |         2.29 |
+|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_18[0] | btnU_IBUF        |               21 |             32 |         1.52 |
+|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_19[0] | btnU_IBUF        |               16 |             32 |         2.00 |
+|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_20[0] | btnU_IBUF        |               25 |             32 |         1.28 |
+|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_23[0] | btnU_IBUF        |               28 |             32 |         1.14 |
+|  proc_clk_BUFG        | u_proc/u_PC/PC_reg[7]_24[0] | btnU_IBUF        |               11 |             32 |         2.91 |
 +-----------------------+-----------------------------+------------------+------------------+----------------+--------------+
 
 

@@ -24,7 +24,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.runs/synth_1'
+HD_PWD='C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task-B complete/labProjectCA.runs/synth_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log

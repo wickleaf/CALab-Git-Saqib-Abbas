@@ -1,8 +1,8 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2020.1 (win64) Build 2902540 Wed May 27 19:54:49 MDT 2020
-| Date             : Tue Apr 14 15:03:56 2026
-| Host             : HU-DOPX-PWL05 running 64-bit major release  (build 9200)
+| Date             : Thu Apr 30 11:00:56 2026
+| Host             : DESKTOP-4B0VT85 running 64-bit major release  (build 9200)
 | Command          : report_power -file TopLevelFPGA_power_routed.rpt -pb TopLevelFPGA_power_summary_routed.pb -rpx TopLevelFPGA_power_routed.rpx
 | Design           : TopLevelFPGA
 | Device           : xc7a35tcpg236-1
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.104        |
+| Total On-Chip Power (W)  | 0.093        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.033        |
+| Dynamic (W)              | 0.021        |
 | Device Static (W)        | 0.072        |
 | Effective TJA (C/W)      | 5.0          |
 | Max Ambient (C)          | 84.5         |
@@ -53,18 +53,18 @@ Table of Contents
 | On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
 +--------------------------+-----------+----------+-----------+-----------------+
 | Clocks                   |    <0.001 |        3 |       --- |             --- |
-| Slice Logic              |     0.014 |     1789 |       --- |             --- |
-|   LUT as Logic           |     0.013 |      837 |     20800 |            4.02 |
-|   F7/F8 Muxes            |    <0.001 |      172 |     32600 |            0.53 |
-|   LUT as Distributed RAM |    <0.001 |       64 |      9600 |            0.67 |
+| Slice Logic              |     0.009 |     1666 |       --- |             --- |
+|   LUT as Logic           |     0.008 |      829 |     20800 |            3.99 |
 |   CARRY4                 |    <0.001 |       36 |      8150 |            0.44 |
-|   Register               |    <0.001 |      438 |     41600 |            1.05 |
+|   F7/F8 Muxes            |    <0.001 |      166 |     32600 |            0.51 |
+|   LUT as Distributed RAM |    <0.001 |       64 |      9600 |            0.67 |
+|   Register               |    <0.001 |      406 |     41600 |            0.98 |
 |   BUFG                   |    <0.001 |        1 |        32 |            3.13 |
 |   Others                 |     0.000 |        9 |       --- |             --- |
-| Signals                  |     0.017 |     1435 |       --- |             --- |
+| Signals                  |     0.011 |     1320 |       --- |             --- |
 | I/O                      |    <0.001 |       47 |       106 |           44.34 |
 | Static Power             |     0.072 |          |           |                 |
-| Total                    |     0.104 |          |           |                 |
+| Total                    |     0.093 |          |           |                 |
 +--------------------------+-----------+----------+-----------+-----------------+
 
 
@@ -74,7 +74,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.042 |       0.032 |      0.010 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.031 |       0.021 |      0.010 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.013 |       0.000 |      0.013 |       NA    | Unspecified | NA         |
 | Vcco33    |       3.300 |     0.001 |       0.000 |      0.001 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -140,14 +140,12 @@ Table of Contents
 3.1 By Hierarchy
 ----------------
 
-+---------------+-----------+
-| Name          | Power (W) |
-+---------------+-----------+
-| TopLevelFPGA  |     0.033 |
-|   u_proc      |     0.031 |
-|     u_ALU     |     0.006 |
-|     u_PC      |     0.023 |
-|     u_RegFile |     0.001 |
-+---------------+-----------+
++--------------+-----------+
+| Name         | Power (W) |
++--------------+-----------+
+| TopLevelFPGA |     0.021 |
+|   u_proc     |     0.020 |
+|     u_PC     |     0.018 |
++--------------+-----------+
 
 

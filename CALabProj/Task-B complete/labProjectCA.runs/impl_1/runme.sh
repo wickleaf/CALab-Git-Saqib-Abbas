@@ -24,7 +24,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='C:/Users/ba09716/Downloads/labProjectCA/labProjectCA.runs/impl_1'
+HD_PWD='C:/Users/Saqib Rehman/Desktop/CALab2/CALab-Git-Saqib-Abbas/CALabProj/Task-B complete/labProjectCA.runs/impl_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log
@@ -41,7 +41,7 @@ EAStep()
 }
 
 # pre-commands:
-/bin/touch .init_design.begin.rst
+/bin/touch .write_bitstream.begin.rst
 EAStep vivado -log TopLevelFPGA.vdi -applog -m64 -product Vivado -messageDb vivado.pb -mode batch -source TopLevelFPGA.tcl -notrace
 
 

@@ -1,8 +1,8 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------
 | Tool Version              : Vivado v.2020.1 (win64) Build 2902540 Wed May 27 19:54:49 MDT 2020
-| Date                      : Tue Apr 14 12:57:56 2026
-| Host                      : HU-DOPX-PWL05 running 64-bit major release  (build 9200)
+| Date                      : Thu Apr 30 11:11:33 2026
+| Host                      : DESKTOP-4B0VT85 running 64-bit major release  (build 9200)
 | Command                   : report_io -file TopLevelFPGA_io_placed.rpt
 | Design                    : TopLevelFPGA
 | Device                    : xc7a35t
